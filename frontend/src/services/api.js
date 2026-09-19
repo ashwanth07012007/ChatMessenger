@@ -1,2 +1,2 @@
 export const BASE_URL =
-    "https://whatsup-backend-gf2k.onrender.com";
+    import.meta.env.VITE_API_URL;
