@@ -20,7 +20,7 @@ export const connectWebSocket = (token) => {
     client = new Client({
 
         brokerURL:
-            "ws://whatsup-backend-gf2k.onrender.com/ws",
+            "wss://whatsup-backend-gf2k.onrender.com/ws",
 
         connectHeaders: {
             Authorization:
@@ -35,9 +35,6 @@ export const connectWebSocket = (token) => {
                 "WebSocket connected"
             );
 
-
-            // If user selected a conversation
-            // before WebSocket connected
             if (pendingConversationId) {
 
                 subscribeToConversation(
@@ -68,7 +65,6 @@ export const connectWebSocket = (token) => {
         }
     });
 
-
     client.activate();
 };
 
@@ -88,8 +84,6 @@ export const subscribeToConversation = (
     pendingOnMessage =
         onMessage;
 
-
-    // WebSocket not connected yet
     if (!client || !client.connected) {
 
         console.log(
@@ -99,8 +93,6 @@ export const subscribeToConversation = (
         return;
     }
 
-
-    // Remove old subscription
     if (subscription) {
 
         subscription.unsubscribe();
@@ -108,16 +100,13 @@ export const subscribeToConversation = (
         subscription = null;
     }
 
-
     const destination =
         `/topic/conversation/${conversationId}`;
-
 
     console.log(
         "SUBSCRIBING TO:",
         destination
     );
-
 
     subscription =
         client.subscribe(
@@ -130,12 +119,10 @@ export const subscribeToConversation = (
                         message.body
                     );
 
-
                 console.log(
                     "RECEIVED MESSAGE:",
                     data
                 );
-
 
                 onMessage(data);
 
@@ -157,10 +144,8 @@ export const disconnectWebSocket = () => {
         subscription = null;
     }
 
-
     pendingConversationId = null;
     pendingOnMessage = null;
-
 
     if (client) {
 
@@ -188,7 +173,6 @@ export const sendMessage = (
 
         return;
     }
-
 
     client.publish({
 
