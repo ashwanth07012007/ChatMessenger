@@ -29,7 +29,8 @@ public class WebSocketConfig
             StompEndpointRegistry registry) {
 
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("*");
+                .setAllowedOriginPatterns("http://localhost:5173",
+                        "https://chat-messenger-frontend.vercel.app");
     }
 
     @Override
