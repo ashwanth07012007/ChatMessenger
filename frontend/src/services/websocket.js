@@ -20,7 +20,7 @@ export const connectWebSocket = (token) => {
     client = new Client({
 
         brokerURL:
-            "ws://localhost:8080/ws",
+            "ws://whatsup-backend-gf2k.onrender.com/ws",
 
         connectHeaders: {
             Authorization:
