@@ -2,7 +2,9 @@ import axios from "axios";
 
 import { BASE_URL } from "./api";
 
-export const getMessages = async (conversationId) => {
+export const getMessages = async (
+    conversationId
+) => {
 
     const token =
         localStorage.getItem("token");

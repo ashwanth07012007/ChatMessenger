@@ -1,0 +1,285 @@
+/* SETTINGS PAGE */
+
+.settings-page {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+
+/* SETTINGS CARD */
+
+.settings-card {
+    width: 100%;
+    max-width: 560px;
+    padding: 42px 44px;
+    background: #111827;
+    border: 1px solid #263244;
+    border-radius: 16px;
+    box-sizing: border-box;
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+
+/* TITLE */
+
+.settings-card h1 {
+    margin: 0 0 8px;
+    color: #f8fafc;
+    font-size: 32px;
+    font-weight: 600;
+    text-align: center;
+}
+
+
+/* SUBTITLE */
+
+.settings-subtitle {
+    margin: 0 0 30px;
+    color: #94a3b8;
+    font-size: 15px;
+    text-align: center;
+}
+
+
+/* PROFILE */
+
+.settings-profile {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+
+/* AVATAR */
+
+.settings-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    font-size: 34px;
+    font-weight: 600;
+
+    border: 3px solid #334155;
+    box-sizing: border-box;
+}
+
+
+/* PROFILE IMAGE */
+
+.settings-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+
+/* FORM */
+
+.settings-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+/* FIELD */
+
+.settings-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+/* LABEL */
+
+.settings-field label {
+    color: #e2e8f0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+
+/* INPUT + TEXTAREA */
+
+.settings-field input,
+.settings-field textarea {
+    width: 100%;
+    border: 1px solid #334155;
+    border-radius: 9px;
+    outline: none;
+    background: #1e293b;
+    color: #f8fafc;
+    font-size: 15px;
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* INPUT */
+
+.settings-field input {
+    height: 52px;
+    padding: 0 16px;
+}
+
+
+/* TEXTAREA */
+
+.settings-field textarea {
+    min-height: 110px;
+    padding: 14px 16px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
+
+/* PLACEHOLDER */
+
+.settings-field input::placeholder,
+.settings-field textarea::placeholder {
+    color: #64748b;
+}
+
+
+/* FOCUS */
+
+.settings-field input:focus,
+.settings-field textarea:focus {
+    border-color: #3b82f6;
+    box-shadow:
+        0 0 0 2px
+        rgba(59, 130, 246, 0.12);
+}
+
+
+/* SUCCESS */
+
+.settings-success {
+    margin: -4px 0 0;
+    color: #4ade80;
+    font-size: 14px;
+    text-align: center;
+}
+
+
+/* ERROR */
+
+.settings-error {
+    margin: -4px 0 0;
+    color: #f87171;
+    font-size: 14px;
+    text-align: center;
+}
+
+
+/* SAVE BUTTON */
+
+.settings-save {
+    width: 100%;
+    height: 52px;
+    margin-top: 4px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.15s ease;
+}
+
+
+.settings-save:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+
+.settings-save:active {
+    transform: translateY(0);
+}
+
+
+/* BACK BUTTON */
+
+.settings-back {
+    width: 100%;
+    height: 48px;
+    margin-top: 14px;
+
+    border: 1px solid #334155;
+    border-radius: 9px;
+
+    background: transparent;
+    color: #cbd5e1;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.settings-back:hover {
+    background: #1e293b;
+    border-color: #475569;
+    color: #ffffff;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .settings-page {
+        padding: 20px 14px;
+    }
+
+    .settings-card {
+        padding: 32px 24px;
+    }
+
+    .settings-card h1 {
+        font-size: 28px;
+    }
+
+    .settings-avatar {
+        width: 88px;
+        height: 88px;
+        font-size: 30px;
+    }
+}

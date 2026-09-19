@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./Login.css";
 
-function Login() {
+import "./RegisterPage.css";
+
+function RegisterPage() {
 
     const navigate = useNavigate();
 
     const [username, setUsername] =
+        useState("");
+
+    const [email, setEmail] =
         useState("");
 
     const [password, setPassword] =
@@ -16,7 +20,7 @@ function Login() {
     const [error, setError] =
         useState("");
 
-    const handleLogin = async (e) => {
+    const handleRegister = async (e) => {
 
         e.preventDefault();
 
@@ -24,61 +28,47 @@ function Login() {
 
         try {
 
-            const response =
-                await axios.post(
-                    "http://localhost:8080/api/auth/login",
-                    {
-                        username: username,
-                        password: password
-                    }
-                );
-
-            console.log(
-                "LOGIN RESPONSE:",
-                response.data
+            await axios.post(
+                "http://localhost:8080/api/auth/register",
+                {
+                    username,
+                    email,
+                    password
+                }
             );
 
-            localStorage.setItem(
-                "token",
-                response.data.token
-            );
-
-            console.log(
-                "JWT SAVED"
-            );
-
-            navigate("/dashboard");
+            navigate("/login");
 
         } catch (error) {
 
             console.error(
-                "LOGIN FAILED:",
+                "REGISTER FAILED:",
                 error
             );
 
             setError(
                 error.response?.data ||
-                "Invalid username or password"
+                "Registration failed"
             );
         }
     };
 
+
     return (
+        <div className="register-page">
 
-        <div className="login-page">
-
-            <div className="login-card">
+            <div className="register-card">
 
                 <h1>
-                    Welcome Back
+                    Create Account
                 </h1>
 
-                <p className="login-subtitle">
-                    Login to continue chatting.
+                <p className="register-subtitle">
+                    Create your account to start chatting.
                 </p>
 
 
-                <form onSubmit={handleLogin}>
+                <form onSubmit={handleRegister}>
 
                     <input
                         type="text"
@@ -86,6 +76,19 @@ function Login() {
                         value={username}
                         onChange={(e) =>
                             setUsername(
+                                e.target.value
+                            )
+                        }
+                        required
+                    />
+
+
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) =>
+                            setEmail(
                                 e.target.value
                             )
                         }
@@ -107,29 +110,29 @@ function Login() {
 
 
                     {error && (
-                        <p className="login-error">
+                        <p className="register-error">
                             {error}
                         </p>
                     )}
 
 
                     <button type="submit">
-                        Login
+                        Register
                     </button>
 
                 </form>
 
 
-                <p className="login-register">
+                <p className="register-login">
 
-                    Don't have an account?
+                    Already have an account?
 
                     <span
                         onClick={() =>
-                            navigate("/register")
+                            navigate("/login")
                         }
                     >
-                        Register
+                        Login
                     </span>
 
                 </p>
@@ -140,4 +143,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default RegisterPage;

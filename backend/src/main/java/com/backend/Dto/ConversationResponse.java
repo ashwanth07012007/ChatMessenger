@@ -16,4 +16,5 @@ public class ConversationResponse {
     private String name;
 
     private Long userid;
+    private String username;
 }

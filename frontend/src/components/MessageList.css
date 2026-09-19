@@ -1,0 +1,106 @@
+.message-list {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    padding: 20px 24px;
+
+    overflow-y: auto;
+
+    box-sizing: border-box;
+      /* Hide scrollbar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+/* No messages */
+
+.no-messages {
+    margin: auto;
+
+    color: #64748b;
+
+    font-size: 15px;
+}
+
+/* Message row */
+
+.message-row {
+    display: flex;
+    width: 100%;
+}
+
+/* Logged-in user's message */
+
+.message-row.mine {
+    justify-content: flex-start;
+}
+
+/* Other user's message */
+
+.message-row.theirs {
+    justify-content: flex-end;
+}
+
+/* Bubble */
+
+.message-bubble {
+    max-width: 65%;
+
+    padding: 10px 14px;
+
+    border-radius: 16px;
+
+    font-size: 15px;
+    line-height: 1.4;
+
+    word-wrap: break-word;
+
+    box-sizing: border-box;
+}
+
+/* My bubble */
+
+.message-row.mine .message-bubble {
+    background: #2563eb;
+    color: #ffffff;
+
+    border-bottom-left-radius: 4px;
+}
+
+/* Other user's bubble */
+
+.message-row.theirs .message-bubble {
+    background: #1e293b;
+    color: #e2e8f0;
+
+    border: 1px solid #334155;
+
+    border-bottom-right-radius: 4px;
+}
+
+/* Sender name */
+
+.message-sender {
+    display: block;
+
+    margin-bottom: 3px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    opacity: 0.75;
+}
+
+/* Message content */
+
+.message-content {
+    display: block;
+}
+
+.message-list::-webkit-scrollbar {
+    display: none;
+}

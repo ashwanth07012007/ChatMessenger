@@ -1,5 +1,6 @@
 package com.backend.Controller;
 
+import com.backend.Dto.ConversationResponse;
 import com.backend.Dto.CreateConversationRequest;
 
 import com.backend.Entity.Conversation;
@@ -20,9 +21,9 @@ public class ConversationController {
     }
 
     @PostMapping("/create")
-    public Conversation createConversation(@RequestBody CreateConversationRequest req, Authentication auth){
-        String email=auth.getName();
-        return conversationService.createConversation(email,req);
+    public ConversationResponse createConversation(@RequestBody CreateConversationRequest req, Authentication auth){
+        String username=auth.getName();
+        return conversationService.createConversation(username,req);
     }
 
     @GetMapping

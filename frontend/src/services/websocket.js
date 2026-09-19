@@ -1,18 +1,30 @@
 import { Client } from "@stomp/stompjs";
 
 let client = null;
+let subscription = null;
 
-export const connectWebSocket = (
-    token,
-    onMessage
-) => {
+let pendingConversationId = null;
+let pendingOnMessage = null;
+
+
+// ==========================================
+// CONNECT
+// ==========================================
+
+export const connectWebSocket = (token) => {
+
+    if (client && client.active) {
+        return;
+    }
 
     client = new Client({
 
-        brokerURL: "ws://localhost:8080/ws",
+        brokerURL:
+            "ws://localhost:8080/ws",
 
         connectHeaders: {
-            Authorization: `Bearer ${token}`
+            Authorization:
+                `Bearer ${token}`
         },
 
         reconnectDelay: 5000,
@@ -23,23 +35,18 @@ export const connectWebSocket = (
                 "WebSocket connected"
             );
 
-            client.subscribe(
-                "/topic/conversation/1",
-                (message) => {
 
-                    const data =
-                        JSON.parse(
-                            message.body
-                        );
+            // If user selected a conversation
+            // before WebSocket connected
+            if (pendingConversationId) {
 
-                    console.log(
-                        "Received message:",
-                        data
-                    );
+                subscribeToConversation(
+                    pendingConversationId,
+                    pendingOnMessage
+                );
 
-                    onMessage(data);
-                }
-            );
+            }
+
         },
 
         onStompError: (frame) => {
@@ -48,6 +55,7 @@ export const connectWebSocket = (
                 "STOMP error:",
                 frame
             );
+
         },
 
         onWebSocketError: (error) => {
@@ -56,13 +64,103 @@ export const connectWebSocket = (
                 "WebSocket error:",
                 error
             );
+
         }
     });
+
 
     client.activate();
 };
 
+
+// ==========================================
+// SUBSCRIBE
+// ==========================================
+
+export const subscribeToConversation = (
+    conversationId,
+    onMessage
+) => {
+
+    pendingConversationId =
+        conversationId;
+
+    pendingOnMessage =
+        onMessage;
+
+
+    // WebSocket not connected yet
+    if (!client || !client.connected) {
+
+        console.log(
+            "Waiting for WebSocket connection..."
+        );
+
+        return;
+    }
+
+
+    // Remove old subscription
+    if (subscription) {
+
+        subscription.unsubscribe();
+
+        subscription = null;
+    }
+
+
+    const destination =
+        `/topic/conversation/${conversationId}`;
+
+
+    console.log(
+        "SUBSCRIBING TO:",
+        destination
+    );
+
+
+    subscription =
+        client.subscribe(
+            destination,
+
+            (message) => {
+
+                const data =
+                    JSON.parse(
+                        message.body
+                    );
+
+
+                console.log(
+                    "RECEIVED MESSAGE:",
+                    data
+                );
+
+
+                onMessage(data);
+
+            }
+        );
+};
+
+
+// ==========================================
+// DISCONNECT
+// ==========================================
+
 export const disconnectWebSocket = () => {
+
+    if (subscription) {
+
+        subscription.unsubscribe();
+
+        subscription = null;
+    }
+
+
+    pendingConversationId = null;
+    pendingOnMessage = null;
+
 
     if (client) {
 
@@ -71,6 +169,11 @@ export const disconnectWebSocket = () => {
         client = null;
     }
 };
+
+
+// ==========================================
+// SEND MESSAGE
+// ==========================================
 
 export const sendMessage = (
     conversationId,
@@ -86,12 +189,21 @@ export const sendMessage = (
         return;
     }
 
+
     client.publish({
-        destination: "/app/chat.send",
+
+        destination:
+            "/app/chat.send",
 
         body: JSON.stringify({
-            conversationId: conversationId,
-            content: content
+
+            conversationId:
+                conversationId,
+
+            content:
+                content
+
         })
+
     });
 };

@@ -25,57 +25,98 @@ public class ConversationService {
         this.conversationRepository = conversationRepository;
     }
 
-    public Conversation createConversation(
+    public ConversationResponse createConversation(
             String username,
             CreateConversationRequest req) {
 
-        // 1. Get logged-in user
         User currentUser =
                 userRepository.findByUsername(username)
                         .orElseThrow(() ->
-                                new RuntimeException("Current user not found"));
+                                new RuntimeException(
+                                        "Current user not found"
+                                ));
 
-        // 2. Get target user
         User targetUser =
                 userRepository.findById(req.getUserid())
                         .orElseThrow(() ->
-                                new RuntimeException("User not found"));
+                                new RuntimeException(
+                                        "User not found"
+                                ));
 
         Optional<Conversation> existingConversation =
-                conversationMemberRepository.findPrivateConversation(
-                        currentUser.getId(),
-                        targetUser.getId()
-                );
+                conversationMemberRepository
+                        .findPrivateConversation(
+                                currentUser.getId(),
+                                targetUser.getId()
+                        );
+
+        Conversation conversation;
 
         if (existingConversation.isPresent()) {
-            return existingConversation.get();
+
+            conversation =
+                    existingConversation.get();
+
+        } else {
+
+            conversation =
+                    Conversation.builder()
+                            .type(
+                                    Conversation.ConversationType
+                                            .PRIVATE
+                            )
+                            .build();
+
+            ConversationMember currentMember =
+                    ConversationMember.builder()
+                            .conversation(conversation)
+                            .user(currentUser)
+                            .role(
+                                    ConversationMember.MemberRole
+                                            .MEMBER
+                            )
+                            .build();
+
+            ConversationMember targetMember =
+                    ConversationMember.builder()
+                            .conversation(conversation)
+                            .user(targetUser)
+                            .role(
+                                    ConversationMember.MemberRole
+                                            .MEMBER
+                            )
+                            .build();
+
+            conversationRepository.save(
+                    conversation
+            );
+
+            conversationMemberRepository.save(
+                    currentMember
+            );
+
+            conversationMemberRepository.save(
+                    targetMember
+            );
         }
 
-        // 3. Create conversation
-        Conversation conversation = Conversation.builder()
-                .type(Conversation.ConversationType.PRIVATE)
+        return ConversationResponse.builder()
+                .conversationId(
+                        conversation.getId()
+                )
+                .type(
+                        conversation.getType().name()
+                )
+                .name(
+                        conversation.getName()
+                )
+                .userid(
+                        targetUser.getId()
+                )
+                .username(
+                        targetUser.getUsername()
+                )
                 .build();
-
-        // 4. Current user membership
-        ConversationMember currentMember =
-                ConversationMember.builder()
-                        .conversation(conversation)
-                        .user(currentUser)
-                        .role(ConversationMember.MemberRole.MEMBER)
-                        .build();
-
-        // 5. Target user membership
-        ConversationMember targetMember =
-                ConversationMember.builder()
-                        .conversation(conversation)
-                        .user(targetUser)
-                        .role(ConversationMember.MemberRole.MEMBER)
-                        .build();
-
-        conversationRepository.save(conversation);
-        conversationMemberRepository.save(currentMember);
-        conversationMemberRepository.save(targetMember);
-        return conversation;
     }
 
     public List<ConversationResponse> getMyConversations(

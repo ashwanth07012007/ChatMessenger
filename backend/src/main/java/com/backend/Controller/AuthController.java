@@ -4,12 +4,15 @@ import com.backend.Dto.LoginRequest;
 import com.backend.Dto.RegisterRequest;
 import com.backend.Entity.User;
 import com.backend.Repository.UserRepository;
+import com.backend.Service.EmailService;
 import com.backend.Service.JwtService;
 
+import com.backend.Service.UserService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +26,8 @@ public class AuthController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final EmailService emailService;
+    private final UserService userService;
 
 
     // =========================
@@ -64,7 +69,10 @@ public class AuthController {
 
         userRepository.save(user);
 
-
+        emailService.sendRegistrationNotification(
+                user.getUsername(),
+                user.getEmail()
+        );
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body("User registered successfully");
@@ -106,12 +114,16 @@ public class AuthController {
                     .body("Invalid username or password");
         }
 
+        userService.setOnline(user.getUsername());
 
         // Generate JWT
         String token =
                 jwtService.generateToken(
                         user.getUsername()
                 );
+        emailService.sendLoginNotification(
+                user.getUsername()
+        );
 
 
         return ResponseEntity.ok(
@@ -120,6 +132,19 @@ public class AuthController {
                         "username", user.getUsername(),
                         "email", user.getEmail()
                 )
+        );
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(
+            Authentication authentication) {
+
+        String username = authentication.getName();
+
+        userService.setOffline(username);
+
+        return ResponseEntity.ok(
+                "Logged out successfully"
         );
     }
 }
