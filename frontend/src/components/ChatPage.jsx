@@ -184,7 +184,7 @@ function ChatPage() {
                     setProfileImage(
                         currentUser.profileImage
                     );
-                    setCurrentBio(
+                    setSelectedUserBio(
                         currentUser.bio
                     );
                 }
