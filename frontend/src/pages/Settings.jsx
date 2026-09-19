@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Settings.css";
+import { BASE_URL } from "../services/api";
 
 function Settings() {
 
@@ -41,7 +42,7 @@ function Settings() {
 
                 const response =
                     await axios.get(
-                        "http://localhost:8080/api/user/profile",
+                        `${BASE_URL}/api/user/profile`,
                         {
                             headers: {
                                 Authorization:
@@ -94,7 +95,7 @@ function Settings() {
     try {
 
         const response = await axios.put(
-            "http://localhost:8080/api/user/profile",
+            `${BASE_URL}/api/user/profile`,
             {
                 username: username,
                 bio: bio,

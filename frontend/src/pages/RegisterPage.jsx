@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import "./RegisterPage.css";
+import { BASE_URL } from "../services/api";
 
 function RegisterPage() {
 
@@ -29,7 +30,7 @@ function RegisterPage() {
         try {
 
             await axios.post(
-                "http://localhost:8080/api/auth/register",
+                `${BASE_URL}/api/auth/register`,
                 {
                     username,
                     email,
